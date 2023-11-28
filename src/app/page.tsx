@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 // eslint-disable-next-line react/display-name
 const Child_1 = React.memo(() => {
@@ -28,6 +28,15 @@ export default function Parent() {
     setText(e.target.value);
   };
 
+  const [count, setCount] = useState(0);
+  const double = (count: number) => {
+    let i = 0;
+    while(i < 300000000) i++;
+    return count * 2;
+  };
+
+  const doubleCount = useMemo(() => double(count), [count]);    // 重い処理
+
   return (
     <div>
       <p>親コンポーネントです。</p>
@@ -39,6 +48,12 @@ export default function Parent() {
       />
       <Child_1 />
       <Child_2 />
+
+      <p>親コンポーネントで重い計算処理</p>
+      <p>
+        Counter: {count}, {doubleCount}
+      </p>
+      <button onClick={() => setCount(count + 1)}>Increment Count2</button>
     </div>
   )
 }
